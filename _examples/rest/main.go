@@ -1,4 +1,3 @@
-//
 // REST
 // ====
 // This example demonstrates a HTTP REST web service with some fixture data.
@@ -36,7 +35,6 @@
 //
 // $ curl http://localhost:3333/articles
 // [{"id":"2","title":"sup"},{"id":"97","title":"awesomeness"}]
-//
 package main
 
 import (
@@ -46,6 +44,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
@@ -112,7 +111,13 @@ func main() {
 		return
 	}
 
-	http.ListenAndServe(":3333", r)
+	httpPort := os.Getenv("HTTP_PORT")
+	if httpPort == "" {
+		httpPort = "8080"
+	}
+
+	fmt.Printf("Listening on port: " + httpPort + "\n")
+	http.ListenAndServe(":"+httpPort, r)
 }
 
 func ListArticles(w http.ResponseWriter, r *http.Request) {
